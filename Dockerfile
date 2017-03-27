@@ -1,17 +1,19 @@
-FROM garethjevans/jenkinsslave-maven:v1.3.5
+FROM garethjevans/jenkinsslave-maven:v1.4.5-alpine
 
 USER root
 
-RUN apt-get update && \
-  apt-get install -y software-properties-common 
-
-RUN apt-add-repository ppa:ansible/ansible && \
-  apt-get update && \
-  apt-get install -y python-pip ansible curl && \
-  pip install softlayer && \
-  pip install docker-py && \
-  pip install pysphere && \
-  adduser --disabled-password --gecos '' ansible
+RUN apk update && \
+    apk --update add python py-pip openssl ca-certificates && \
+    apk --update add --virtual build-dependencies python-dev libffi-dev openssl-dev build-base curl && \
+    pip install --upgrade pip cffi && \
+    pip install ansible && \
+    pip install softlayer && \
+    pip install docker-py && \
+    pip install pyvmomi && \
+    apk del build-dependencies && \
+    rm -rf /var/cache/apk/* && \
+    adduser -D -u 1001 ansible && \
+    mkdir -p /etc/ansible
 
 USER jenkins
 WORKDIR /home/jenkins
