@@ -1,4 +1,4 @@
-FROM garethjevans/jenkinsslave-maven:v1.4.6-ubuntu
+FROM garethjevans/jenkinsslave-maven:v1.4.7-ubuntu
 
 USER root
 
